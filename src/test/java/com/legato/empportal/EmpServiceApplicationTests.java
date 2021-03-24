@@ -1,5 +1,6 @@
 package com.legato.empportal;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 
 import java.util.Date;
@@ -7,7 +8,9 @@ import java.util.Date;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.legato.empportal.entity.Employee;
@@ -16,16 +19,17 @@ import com.legato.empportal.entity.Role;
 import com.legato.empportal.repository.EmployeeRepository;
 import com.legato.empportal.request.EmployeeRequest;
 import com.legato.empportal.service.EmployeeService;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
-@SpringBootTest
 class EmpServiceApplicationTests {
 	private EmployeeService  employeeService;
 	private EmployeeRepository emprepo;
 	
 	@BeforeEach
 	 private void setup() {
-		  employeeService= new EmployeeService();
+
 		  emprepo= mock(EmployeeRepository.class);
+		employeeService= new EmployeeService(emprepo);
 
 	}
 
@@ -52,7 +56,7 @@ class EmpServiceApplicationTests {
 		Role role = Role.valueOf(empRequest.getEmpRole());
 		employee.setEmpRole(role);
 		
-		Mockito.when(emprepo.save(employee)).thenReturn(employee);
+		Mockito.when(emprepo.save(any(Employee.class))).thenReturn(employee);
 		Employee savedEmployee = employeeService.addEmployee(empRequest);
 		Assertions.assertThat(savedEmployee).isEqualTo(employee);
 		

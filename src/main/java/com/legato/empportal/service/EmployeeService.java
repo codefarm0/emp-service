@@ -14,8 +14,11 @@ import com.legato.empportal.request.EmployeeRequest;
 @Service
 public class EmployeeService implements IEmployeeService {
 
-	@Autowired
 	private EmployeeRepository employeeRepository;
+
+	public EmployeeService(EmployeeRepository employeeRepository) {
+		this.employeeRepository = employeeRepository;
+	}
 
 	@Override
 	public Employee addEmployee(EmployeeRequest empRequest) {
